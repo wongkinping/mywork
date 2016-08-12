@@ -8,7 +8,6 @@ g = 9.8
 lamb = 0.7
 T = 0.1
 dt = 0.001
-x_initial = 0
 x2 = 2
 
 
@@ -19,12 +18,16 @@ y_array = []
 def f(x, v):
     return -k / M*x + g - lamb / M*v
 
-def xfinal(v, callback=None):
-    x = x_initial
+def xfinal(v, callback=None, inclusive=False):
+    x = 0
+
     end = math.floor(T / dt)
+    if inclusive:
+        end += 1
+
     for i in range(0, end):
         if callback:
-                callback(i, dt, x)
+            callback(i, dt, x)
 
         f0 = f(x, v)
         v0 = v
@@ -69,9 +72,7 @@ def main():
             a = c
 
     v = a
-    x = x_initial
-    end = math.floor(T / dt)
-    xfinal(v, my_callback)
+    xfinal(v, my_callback, inclusive=True)
     plt.plot(x_array, y_array)
     plt.savefig('output.png', format='png')
 
